@@ -65,13 +65,22 @@ class Genres(Resource):
         return {'data': data}, 200
 
 
-
+# Kitap adı ile arama yapma
+class Title(Resource):
+    def get(self, name):
+        data = pd.read_csv('books.csv')
+        data = data.to_dict('records')
+        for entry in data:
+            if entry['Title'] == name:
+                return {'data': entry}, 200
+        return {'message': 'Bu isimde bir kitap bulunamadı'}, 404
 
 
 # GET işlemi için url adresleri
 api.add_resource(Books, '/books')
 api.add_resource(Authors, '/authors')
 api.add_resource(Genres, '/genres')
+api.add_resource(Title, '/<string:name>')
 
 if __name__ == '__main__':
     app.run()
